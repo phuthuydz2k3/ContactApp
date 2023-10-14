@@ -40,6 +40,7 @@ public class ContactDetails extends AppCompatActivity {
         //get data from intent
         Intent intent = getIntent();
         id = intent.getStringExtra("contactId");
+        int position = Integer.parseInt(intent.getStringExtra("contactPosition"));
 
         //init view
         fNameTv = findViewById(R.id.fNameTv);
@@ -96,7 +97,8 @@ public class ContactDetails extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ContactDetails.this , AddEditContact.class);
 
-                ModelContact modelContact = dbHelper.getAllData().get(0);
+                ModelContact modelContact = dbHelper.getAllData().get(position);
+
                 intent.putExtra("ID", id);
                 intent.putExtra("FNAME", modelContact.getfName());
                 intent.putExtra("LNAME", modelContact.getlName());

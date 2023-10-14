@@ -1,8 +1,10 @@
 package com.example.contactapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ContactV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ContactViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         ModelContact modelContact = contactList.get(position);
 
@@ -51,7 +53,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ContactV
 
         //set data in view
         holder.contactName.setText(fName);
-        if (image.equals("")){
+        if (image.equals("") || image.equals("null")){
             holder.contactImage.setImageResource(R.drawable.ic_baseline_person_24);
         }else {
             holder.contactImage.setImageURI(Uri.parse(image));
@@ -63,8 +65,9 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ContactV
             public void onClick(View v) {
                 // create intent to move to contactsDetails Activity with contact id as reference
                 Intent intent = new Intent(context,ContactDetails.class);
-                intent.putExtra("contactId",id);
-                context.startActivity(intent); // now get data from details Activity
+                intent.putExtra("contactId", id);
+                intent.putExtra("contactPosition", String.valueOf(position));
+                context.startActivity(intent);
             }
         });
 

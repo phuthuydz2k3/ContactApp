@@ -269,7 +269,7 @@ public class AddEditContact2 extends AppCompatActivity {
     }
 
     private void backHome() {
-        Intent intent = new Intent(AddEditContact2.this, ContactDetails2.class);
+        Intent intent = new Intent(AddEditContact2.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

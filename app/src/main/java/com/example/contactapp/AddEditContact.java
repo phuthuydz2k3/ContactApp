@@ -29,6 +29,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Permission;
 
 public class AddEditContact extends AppCompatActivity {
@@ -112,7 +122,7 @@ public class AddEditContact extends AppCompatActivity {
             cNameEt.setText(cName);
             imageUri = Uri.parse(image);
 
-            if (image.equals("")){
+            if (image.equals("") || image.equals("null")){
                 profileIv.setImageResource(R.drawable.ic_baseline_person_24);
             }else {
                 profileIv.setImageURI(imageUri);
@@ -228,13 +238,10 @@ public class AddEditContact extends AppCompatActivity {
 
         //check filed data
         if (!pNum.isEmpty()) {
-            //save data ,if user have only one data
-
-            //check edit or add mode to save data in sql
             if (isEditMode){
                  dbHelper.updateContact(
                         "" + id,
-                        "" + image,
+                        "" + imageUri.toString(),
                         "" + fName,
                         "" + lName,
                         "" + cName,
@@ -273,13 +280,10 @@ public class AddEditContact extends AppCompatActivity {
 
     private void backHome() {
         Intent intent;
+        intent = new Intent(AddEditContact.this, MainActivity.class);
         if (isEditMode)
         {
-            intent = new Intent(AddEditContact.this, ContactDetails.class);
-        }
-        else
-        {
-            intent = new Intent(AddEditContact.this, MainActivity.class);
+            intent.putExtra("exit", "exit");
         }
         startActivity(intent);
         finish();

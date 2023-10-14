@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
         initializeCard();
 
+        if (getIntent().hasExtra("exit")) {
+            finish();
+        }
+
         //initialization
         fab = findViewById(R.id.fab);
         contactRv = findViewById(R.id.contactRv);
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                System.exit(0);
             }
         });
 
@@ -161,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,ContactDetails2.class);
                 intent.putExtra("contactId", card.getId());
-                startActivity(intent); // now get data from details Activity
+                startActivity(intent);
                 finish();
             }
         });
@@ -171,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,ContactDetails2.class);
                 intent.putExtra("contactId", card.getId());
-                startActivity(intent); // now get data from details Activity
+                startActivity(intent);
                 finish();
             }
         });

@@ -1,17 +1,22 @@
 package com.example.contactapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
-import android.widget.SearchView;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -20,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     //view
     private FloatingActionButton fab;
     private RecyclerView contactRv;
+
+    private LinearLayout moveBackButton;
 
     //db
     private DbHelper dbHelper;
@@ -33,15 +40,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-        //init db
         dbHelper = new DbHelper(this);
+        if (!isTableExists(dbHelper.getReadableDatabase(), Constants.TABLE_NAME))
+        {
+            dbHelper.getWritableDatabase().execSQL(Constants.CREATE_TABLE);
+        }
+
+        initializeCard();
 
         //initialization
         fab = findViewById(R.id.fab);
         contactRv = findViewById(R.id.contactRv);
-
+        moveBackButton = findViewById(R.id.moveBackBtn);
         contactRv.setHasFixedSize(true);
 
         // add listener
@@ -52,16 +62,124 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,AddEditContact.class);
                 intent.putExtra("isEditMode",false);
                 startActivity(intent);
+                finish();
             }
+        });
+
+        moveBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        EditText search = findViewById(R.id.searchContact);
+        FrameLayout card = findViewById(R.id.card);
+        TextView cc = findViewById(R.id.cc);
+        cc.setVisibility(View.GONE);
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    // Hide the element when the EditText gains focus
+                    cc.setVisibility(View.VISIBLE);
+                    card.setVisibility(View.GONE);
+                } else
+                {
+                    cc.setVisibility(View.GONE);
+                    card.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        cc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Clear the text inside the search EditText
+                search.setText("");
+
+                // Remove focus from the search EditText
+                search.clearFocus();
+            }
+        });
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchContact(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
 
         loadData();
     }
 
+    private void initializeCard()
+    {
+        DbHelper2 dbHelper = new DbHelper2(this);
+        if (!isTableExists(dbHelper.getReadableDatabase(), Constants.TABLE_NAME_2))
+        {
+            dbHelper.getWritableDatabase().execSQL(Constants.CREATE_TABLE_2);
+        }
+
+        if (dbHelper.getAllData().size() == 0)
+        {
+            String timeStamp = ""+System.currentTimeMillis();
+            dbHelper.insertContact(
+                    "" + R.drawable.ic_baseline_person_24,
+                    "" + "Anh",
+                    "" + "Tran",
+                    "" + "HUST",
+                    "" + "0973851011",
+                    "" + "hnhtr1999@gmail.com",
+                    "" + timeStamp,
+                    "" + timeStamp
+            );
+        }
+
+        ModelContact card = dbHelper.getAllData().get(0);
+
+        ImageView imageView = findViewById(R.id.image);
+        TextView fullName = findViewById(R.id.name);
+        String image = card.getImage();
+
+        if (image.equals("")){
+            imageView.setImageResource(R.drawable.ic_baseline_person_24);
+        }else {
+            imageView.setImageResource(R.drawable.ic_baseline_person_24);
+        }
+        fullName.setText("Your card");
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,ContactDetails2.class);
+                intent.putExtra("contactId", card.getId());
+                startActivity(intent); // now get data from details Activity
+                finish();
+            }
+        });
+
+        fullName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,ContactDetails2.class);
+                intent.putExtra("contactId", card.getId());
+                startActivity(intent); // now get data from details Activity
+                finish();
+            }
+        });
+    }
+
     private void loadData() {
         adapterContact = new AdapterContact(this,dbHelper.getAllData());
         contactRv.setAdapter(adapterContact);
-
     }
 
     @Override
@@ -70,54 +188,25 @@ public class MainActivity extends AppCompatActivity {
         loadData(); // refresh data
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.main_top_menu,menu);
-
-        //get search item from menu
-        MenuItem item = menu.findItem(R.id.searchContact);
-        //search area
-        SearchView searchView = (SearchView) item.getActionView();
-        //set max value for width
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchContact(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                searchContact(newText);
-                return true;
-            }
-        });
-
-
-        return true;
-
-    }
-
     private void searchContact(String query) {
         adapterContact = new AdapterContact(this,dbHelper.getSearchContact(query));
         contactRv.setAdapter(adapterContact);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.deleteAllContact:
-                dbHelper.deleteAllContact();
-                onResume();
-                break;
+    public boolean isTableExists(SQLiteDatabase db, String tableName) {
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name=?", new String[]{tableName});
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                // The table exists
+                return true;
+            } else {
+                // The table doesn't exist
+                return false;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-
-        return true;
     }
-
-
-
 }

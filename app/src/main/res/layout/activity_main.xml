@@ -4,36 +4,152 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSecondary"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/papa">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contacts"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+
+    <EditText
+        android:id="@+id/searchContact"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Search"
+        android:layout_marginTop="110dp"
+        android:textSize="25dp"
+        android:layout_marginLeft="20dp"
+        android:drawableStart="@drawable/baseline_search_24"
+        android:background="@drawable/rounded_search"
+        android:textColorHint="#96959a"
+        android:padding="5dp"
+        android:paddingStart="10dp"
+        android:drawablePadding="7dp"
+        />
+
+    <TextView
+        android:id="@+id/cc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textColor="#03A9F4"
+        android:textSize="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="118dp"
+        android:layout_marginRight="30dp"
+        />
+
+    <FrameLayout
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/searchContact"
+        android:layout_marginTop="10dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#e8e8e8"
+            />
+
+        <LinearLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:src="@drawable/ic_baseline_person_24"
+                app:civ_circle_background_color="#949597"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginStart="10dp"/>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_toEndOf="@+id/image"
+                android:text="My card"
+                android:textSize="@dimen/_16sdp"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e8e8e8"
+        android:layout_below="@id/card"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/row_contact_item"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-
-<!--    fab button for add contact in app-->
+        android:layout_below="@id/card"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/_10sdp"
-        app:backgroundTint="@color/colorTextPrimary"
+        android:layout_alignParentTop="true"
         android:src="@drawable/ic_baseline_add_24"
-        app:tint="@color/white"
-        android:elevation="@dimen/_5sdp"
-        app:pressedTranslationZ="@dimen/_10sdp"
-        android:contentDescription="TODO" />
+        app:tint="#03A9F4"
+        android:elevation="0dp"
+        app:elevation="0dp"
+        app:pressedTranslationZ="0dp"
+        android:contentDescription="TODO"
+        app:backgroundTint="@android:color/transparent"
+        app:maxImageSize="@dimen/design_fab_size_mini"
+        app:borderWidth="0dp"
+        />
 
+    <LinearLayout
+        android:id="@+id/moveBackBtn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:padding="0dp"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        >
 
+        <ImageView
+            android:layout_width="@dimen/design_fab_size_mini"
+            android:layout_height="@dimen/design_fab_size_mini"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_chevron_left_24"
+            app:tint="#03A9F4"/>
 
-
-
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="25sp"
+            android:gravity="left"
+            android:text="Exit"
+            android:textColor="#03A9F4"/>
+    </LinearLayout>
 </RelativeLayout>

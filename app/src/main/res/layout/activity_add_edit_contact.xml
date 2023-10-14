@@ -4,107 +4,215 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSecondary"
     tools:context=".AddEditContact">
 
     <LinearLayout
+        android:id="@+id/f1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:background="#F2F1F9"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/cancelTv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:text="Cancel"
+                android:textSize="22sp"
+                android:textColor="#03A9F4"
+                android:layout_margin="10dp"
+                android:padding="0dp"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/action"
+                android:layout_width="90dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="New contact"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="0dp"/>
+
+            <TextView
+                android:id="@+id/saveTv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:text="Save"
+                android:textSize="22sp"
+                android:textColor="#03A9F4"
+                android:layout_margin="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                />
+
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileIv"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/baseline_person_24"
+            app:civ_circle_background_color="#949597" />
+
+        <TextView
+            android:id="@+id/addPicTv"
+            android:layout_width="160dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:text="Add picture"
+            android:textColor="#03A9F4"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/f2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true"
-        android:padding="@dimen/_10sdp">
+        android:layout_below="@+id/f1"
+        >
 
-<!--        circle image for profile image-->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profileIv"
-            android:layout_width="@dimen/_70sdp"
-            android:layout_height="@dimen/_70sdp"
-            android:src="@drawable/ic_baseline_person_24"
-            android:layout_gravity="center"
-            app:civ_border_width="@dimen/_1sdp"
-            app:civ_border_color="@color/colorTextPrimary"/>
-
-<!--         editText for name input-->
-        <EditText
-            android:id="@+id/nameEt"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Name"
-            android:inputType="textPersonName"
-            android:textColorHint="@color/white"
-            android:background="@drawable/background_input_field"
-            android:padding="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:drawableStart="@drawable/ic_baseline_text_fields_24"
-            android:drawablePadding="@dimen/_5sdp"
-            android:textSize="@dimen/_14sdp"
-            android:textColor="@color/colorTextSecondary"/>
+            android:layout_height="1dp"
+            android:background="#e8e8e8"
+            />
 
-<!--        editText for phone input-->
         <EditText
-            android:id="@+id/phoneEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Phone"
-            android:inputType="phone"
-            android:textColorHint="@color/white"
-            android:background="@drawable/background_input_field"
-            android:padding="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:drawableStart="@drawable/ic_baseline_phone_24"
-            android:drawablePadding="@dimen/_5sdp"
-            android:textSize="@dimen/_14sdp"
-            android:textColor="@color/colorTextSecondary"/>
+            android:id="@+id/fNameEt"
+            android:layout_width="400dp"
+            android:layout_height="48dp"
+            android:hint="First name"
+            android:textColorHint="#B3626267"
+            android:textSize="22sp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/edittext_border"
+            />
 
-        <!--        editText for email input-->
         <EditText
-            android:id="@+id/emailEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:textColorHint="@color/white"
-            android:background="@drawable/background_input_field"
-            android:padding="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:drawableStart="@drawable/ic_baseline_email_24"
-            android:drawablePadding="@dimen/_5sdp"
-            android:textSize="@dimen/_14sdp"
-            android:textColor="@color/colorTextSecondary"/>
+            android:id="@+id/lNameEt"
+            android:layout_width="400dp"
+            android:layout_height="48dp"
+            android:hint="Last name"
+            android:textColorHint="#B3626267"
+            android:textSize="22sp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/edittext_border"
+            />
 
-        <!--        editText for note input-->
         <EditText
-            android:id="@+id/noteEt"
+            android:id="@+id/cNameEt"
+            android:layout_width="400dp"
+            android:layout_height="48dp"
+            android:hint="Company name"
+            android:textColorHint="#B3626267"
+            android:textSize="22sp"
+            android:layout_marginLeft="20dp"
+            android:background="@null"
+            />
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Note"
-            android:inputType="textLongMessage"
-            android:textColorHint="@color/white"
-            android:background="@drawable/background_input_field"
-            android:padding="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:drawableStart="@drawable/ic_baseline_note_24"
-            android:drawablePadding="@dimen/_5sdp"
-            android:textSize="@dimen/_14sdp"
-            android:textColor="@color/colorTextSecondary"/>
+            android:layout_height="1dp"
+            android:background="#e8e8e8"
+            />
+
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/f3"
+        android:layout_width="match_parent"
+        android:layout_height="295dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/f2"
+        android:background="#F2F1F9"
+        >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#e8e8e8"
+                android:layout_marginTop="70dp"
+                />
 
-<!--    fab button for add data to database-->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/_10sdp"
-        app:backgroundTint="@color/colorTextPrimary"
-        android:src="@drawable/ic_baseline_add_24"
-        app:tint="@color/white"
-        android:elevation="@dimen/_5sdp"
-        app:pressedTranslationZ="@dimen/_10sdp"
-        android:contentDescription="TODO" />
+            <EditText
+                android:id="@+id/pNumEt"
+                android:layout_width="400dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="0dp"
+                android:background="@color/white"
+                android:drawableStart="@drawable/baseline_local_phone_40"
+                android:drawablePadding="20dp"
+                android:hint="Phone number"
+                android:paddingStart="16dp"
+                android:textColorHint="#B3626267"
+                android:textSize="22sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#e8e8e8" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#e8e8e8"
+                />
+
+            <EditText
+                android:id="@+id/emailEt"
+                android:layout_width="400dp"
+                android:layout_height="48dp"
+                android:hint="Email"
+                android:textColorHint="#B3626267"
+                android:textSize="22sp"
+                android:background="@color/white"
+                android:layout_marginTop="0dp"
+                android:drawableStart="@drawable/baseline_alternate_email_24"
+                android:drawablePadding="20dp"
+                android:paddingStart="16dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#e8e8e8" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

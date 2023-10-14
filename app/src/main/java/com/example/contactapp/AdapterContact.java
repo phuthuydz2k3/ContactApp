@@ -9,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
 
 import java.util.ArrayList;
 
@@ -50,28 +47,15 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ContactV
         //we need only All data
         String id = modelContact.getId();
         String image = modelContact.getImage();
-        String name = modelContact.getName();
-        String phone= modelContact.getPhone();
-        String email = modelContact.getEmail();
-        String note = modelContact.getNote();
-        String addedTime = modelContact.getAddedTime();
-        String updatedTime = modelContact.getUpdatedTime();
+        String fName = modelContact.getfName();
 
         //set data in view
-        holder.contactName.setText(name);
+        holder.contactName.setText(fName);
         if (image.equals("")){
             holder.contactImage.setImageResource(R.drawable.ic_baseline_person_24);
         }else {
             holder.contactImage.setImageURI(Uri.parse(image));
         }
-
-        //handle click listener
-        holder.contactDial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         //handle item click and show contact details
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -81,33 +65,6 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ContactV
                 Intent intent = new Intent(context,ContactDetails.class);
                 intent.putExtra("contactId",id);
                 context.startActivity(intent); // now get data from details Activity
-                Toast.makeText(context, "Heelo", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // handle editBtn click
-        holder.contactEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // create intent to move AddEditActivity to update data
-                Intent intent = new Intent(context,AddEditContact.class);
-                //pass the value of current position
-                intent.putExtra("ID",id);
-                intent.putExtra("NAME",name);
-                intent.putExtra("PHONE",phone);
-                intent.putExtra("EMAIL",email);
-                intent.putExtra("NOTE",note);
-                intent.putExtra("ADDEDTIME",addedTime);
-                intent.putExtra("UPDATEDTIME",updatedTime);
-                intent.putExtra("IMAGE",image);
-
-                // pass a boolean data to define it is for edit purpose
-                intent.putExtra("isEditMode",true);
-
-                //start intent
-                context.startActivity(intent);
-
-
             }
         });
 
@@ -119,16 +76,10 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ContactV
                 dbHelper.deleteContact(id);
 
                 //refresh data by calling resume state of MainActivity
-                ((MainActivity)context).onResume();
+                ((MainActivity) context).onResume();
 
             }
         });
-
-
-
-
-
-
     }
 
     @Override
@@ -139,8 +90,8 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ContactV
     class ContactViewHolder extends RecyclerView.ViewHolder{
 
         //view for row_contact_item
-        ImageView contactImage,contactDial;
-        TextView contactName,contactEdit,contactDelete;
+        ImageView contactImage, contactDelete;
+        TextView contactName;
         RelativeLayout relativeLayout;
 
         public ContactViewHolder(@NonNull View itemView) {
@@ -148,10 +99,8 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ContactV
 
             //init view
             contactImage = itemView.findViewById(R.id.contact_image);
-            contactDial = itemView.findViewById(R.id.contact_number_dial);
             contactName = itemView.findViewById(R.id.contact_name);
             contactDelete = itemView.findViewById(R.id.contact_delete);
-            contactEdit = itemView.findViewById(R.id.contact_edit);
             relativeLayout = itemView.findViewById(R.id.mainLayout);
         }
     }

@@ -22,6 +22,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,15 +34,11 @@ import java.security.Permission;
 public class AddEditContact extends AppCompatActivity {
 
     private ImageView profileIv;
-    private EditText nameEt,phoneEt,emailEt,noteEt;
-    private FloatingActionButton fab;
+    private EditText fNameEt, lNameEt, cNameEt, pNumEt, emailEt;
+    private TextView cancelTv, saveTv, addPicTv;
 
-    //String variable;
-    private String id,image,name,phone,email,note,addedTime,updatedTime;
+    private String id, image, fName, lName, cName, pNum, email, addedTime, updatedTime;
     private Boolean isEditMode;
-
-    //action bar
-    private ActionBar actionBar;
 
     //permission constant
     private static final int CAMERA_PERMISSION_CODE = 100;
@@ -74,21 +71,18 @@ public class AddEditContact extends AppCompatActivity {
         cameraPermission = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-        //init actionBar
-        actionBar = getSupportActionBar();
 
-
-        //back button
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
 
         //init view
         profileIv = findViewById(R.id.profileIv);
-        nameEt = findViewById(R.id.nameEt);
-        phoneEt = findViewById(R.id.phoneEt);
+        fNameEt = findViewById(R.id.fNameEt);
+        lNameEt = findViewById(R.id.lNameEt);
+        cNameEt = findViewById(R.id.cNameEt);
+        pNumEt = findViewById(R.id.pNumEt);
         emailEt = findViewById(R.id.emailEt);
-        noteEt = findViewById(R.id.noteEt);
-        fab = findViewById(R.id.fab);
+        cancelTv = findViewById(R.id.cancelTv);
+        saveTv = findViewById(R.id.saveTv);
+        addPicTv = findViewById(R.id.addPicTv);
 
         // get intent data
         Intent intent = getIntent();
@@ -96,24 +90,26 @@ public class AddEditContact extends AppCompatActivity {
 
         if (isEditMode){
             //set toolbar title
-            actionBar.setTitle("Update Contact");
 
             //get the other value from intent
             id = intent.getStringExtra("ID");
-            name = intent.getStringExtra("NAME");
-            phone = intent.getStringExtra("PHONE");
+            fName = intent.getStringExtra("FNAME");
+            lName = intent.getStringExtra("LNAME");
+            pNum = intent.getStringExtra("P_NUM");
             email = intent.getStringExtra("EMAIL");
-            note = intent.getStringExtra("NOTE");
+            cName = intent.getStringExtra("CNAME");
             addedTime = intent.getStringExtra("ADDEDTIME");
             updatedTime = intent.getStringExtra("UPDATEDTIME");
             image = intent.getStringExtra("IMAGE");
+            TextView action = findViewById(R.id.action);
+            action.setText("Edit contact");
 
             //set value in editText field
-            nameEt.setText(name);
-            phoneEt.setText(phone);
+            fNameEt.setText(fName);
+            lNameEt.setText(lName);
+            pNumEt.setText(pNum);
             emailEt.setText(email);
-            noteEt.setText(note);
-
+            cNameEt.setText(cName);
             imageUri = Uri.parse(image);
 
             if (image.equals("")){
@@ -121,24 +117,36 @@ public class AddEditContact extends AppCompatActivity {
             }else {
                 profileIv.setImageURI(imageUri);
             }
-
         }else {
             // add mode on
-            actionBar.setTitle("Add Contact");
         }
 
         // add even handler
-        fab.setOnClickListener(new View.OnClickListener() {
+        profileIv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                showImagePickerDialog();
+            }
+        });
+
+        addPicTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showImagePickerDialog();
+            }
+        });
+
+        saveTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 saveData();
             }
         });
 
-        profileIv.setOnClickListener(new View.OnClickListener() {
+        cancelTv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                showImagePickerDialog();
+            public void onClick(View view) {
+                backHome();
             }
         });
     }
@@ -208,31 +216,32 @@ public class AddEditContact extends AppCompatActivity {
     private void saveData() {
 
         //take user giver data in variable
-        name = nameEt.getText().toString();
-        phone = phoneEt.getText().toString();
+        fName = fNameEt.getText().toString();
+        lName = lNameEt.getText().toString();
+        cName = cNameEt.getText().toString();
+        pNum = pNumEt.getText().toString();
         email = emailEt.getText().toString();
-        note = noteEt.getText().toString();
 
         // get current time to save as added time
         String timeStamp = ""+System.currentTimeMillis();
 
 
         //check filed data
-        if (!name.isEmpty() || !phone.isEmpty() || !email.isEmpty() || !note.isEmpty()){
+        if (!pNum.isEmpty()) {
             //save data ,if user have only one data
 
             //check edit or add mode to save data in sql
             if (isEditMode){
-                // edit mode
                  dbHelper.updateContact(
-                        ""+id,
-                        ""+image,
-                        ""+name,
-                        ""+phone,
-                        ""+email,
-                        ""+note,
-                        ""+addedTime,
-                         ""+timeStamp // updated time will new time
+                        "" + id,
+                        "" + image,
+                        "" + fName,
+                        "" + lName,
+                        "" + cName,
+                        "" + pNum,
+                        "" + email,
+                        "" + addedTime,
+                         "" + timeStamp // updated time will new time
                 );
 
                 Toast.makeText(getApplicationContext(), "Updated Successfully....", Toast.LENGTH_SHORT).show();
@@ -240,13 +249,14 @@ public class AddEditContact extends AppCompatActivity {
             }else {
                 // add mode
                 long id =  dbHelper.insertContact(
-                        ""+imageUri,
-                        ""+name,
-                        ""+phone,
-                        ""+email,
-                        ""+note,
-                        ""+timeStamp,
-                        ""+timeStamp
+                        "" + imageUri,
+                        "" + fName,
+                        "" + lName,
+                        "" + cName,
+                        "" + pNum,
+                        "" + email,
+                        "" + timeStamp,
+                        "" + timeStamp
                 );
                 //To check insert data successfully ,show a toast message
                 Toast.makeText(getApplicationContext(), "Inserted Successfully.... "+id, Toast.LENGTH_SHORT).show();
@@ -257,6 +267,22 @@ public class AddEditContact extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Nothing to save....", Toast.LENGTH_SHORT).show();
         }
 
+        backHome();
+
+    }
+
+    private void backHome() {
+        Intent intent;
+        if (isEditMode)
+        {
+            intent = new Intent(AddEditContact.this, ContactDetails.class);
+        }
+        else
+        {
+            intent = new Intent(AddEditContact.this, MainActivity.class);
+        }
+        startActivity(intent);
+        finish();
     }
 
     //ctr + O
@@ -292,6 +318,8 @@ public class AddEditContact extends AppCompatActivity {
     private void requestStoragePermission(){
         ActivityCompat.requestPermissions(this,storagePermission,STORAGE_PERMISSION_CODE);
     }
+
+
 
 
     //handle request permission
@@ -369,20 +397,4 @@ public class AddEditContact extends AppCompatActivity {
             }
         }
     }
-
-    // create view object in java file
-    // Profile image taking with user permission and crop functionality
-    // first permission from manifest,check,request permission
-    // by clicking profileIv open dialog to choose image
-    // pickImage and save in ImageUri variable
-    // create activity for crop image in manifest file
-    // next tutorial we create SQLite database and Add data.
-    // create a class called "Constants" for database and table filed title
-    // now insert data in database from AddEditContact Class
-    // now run application , we done for our insert function
-
-
-
-
-
 }

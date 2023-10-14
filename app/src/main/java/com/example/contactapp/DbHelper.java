@@ -6,24 +6,22 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-//class for database helper
 public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(@Nullable Context context) {
         super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        //create table on database
         db.execSQL(Constants.CREATE_TABLE);
-
     }
 
     @Override
@@ -40,36 +38,33 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     // Insert Function to insert data in database
-    public long insertContact(String image,String name,String phone,String email,String note,String addedTime,String updatedTime){
-
-        //get writable database to write data on db
+    public long insertContact(String image, String fName, String lName, String cName,
+                              String pNum, String email, String addedTime, String updatedTime)
+    {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // create ContentValue class object to save data
         ContentValues contentValues = new ContentValues();
 
-        // id will save automatically as we write query
-        contentValues.put(Constants.C_IMAGE,image);
-        contentValues.put(Constants.C_NAME,name);
-        contentValues.put(Constants.C_PHONE,phone);
-        contentValues.put(Constants.C_EMAIL,email);
-        contentValues.put(Constants.C_NOTE,note);
-        contentValues.put(Constants.C_ADDED_TIME,addedTime);
-        contentValues.put(Constants.C_UPDATED_TIME,updatedTime);
+        contentValues.put(Constants.C_IMAGE, image);
+        contentValues.put(Constants.C_FNAME, fName);
+        contentValues.put(Constants.C_LNAME, lName);
+        contentValues.put(Constants.C_CNAME, cName);
+        contentValues.put(Constants.C_PNUM, pNum);
+        contentValues.put(Constants.C_EMAIL, email);
+        contentValues.put(Constants.C_ADDED_TIME, addedTime);
+        contentValues.put(Constants.C_UPDATED_TIME, updatedTime);
 
-        //insert data in row, It will return id of record
-        long id = db.insert(Constants.TABLE_NAME,null,contentValues);
+        long id = db.insert(Constants.TABLE_NAME, null, contentValues);
 
-        // close db
         db.close();
 
-        //return id
         return id;
-
     }
 
     // Update Function to update data in database
-    public void updateContact(String id,String image,String name,String phone,String email,String note,String addedTime,String updatedTime){
+    public void updateContact(String id,String image, String fName, String lName, String cName,
+                              String pNum, String email, String addedTime, String updatedTime)
+    {
 
         //get writable database to write data on db
         SQLiteDatabase db = this.getWritableDatabase();
@@ -77,13 +72,14 @@ public class DbHelper extends SQLiteOpenHelper {
         // create ContentValue class object to save data
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(Constants.C_IMAGE,image);
-        contentValues.put(Constants.C_NAME,name);
-        contentValues.put(Constants.C_PHONE,phone);
-        contentValues.put(Constants.C_EMAIL,email);
-        contentValues.put(Constants.C_NOTE,note);
-        contentValues.put(Constants.C_ADDED_TIME,addedTime);
-        contentValues.put(Constants.C_UPDATED_TIME,updatedTime);
+        contentValues.put(Constants.C_IMAGE, image);
+        contentValues.put(Constants.C_FNAME, fName);
+        contentValues.put(Constants.C_LNAME, lName);
+        contentValues.put(Constants.C_CNAME, cName);
+        contentValues.put(Constants.C_PNUM, pNum);
+        contentValues.put(Constants.C_EMAIL, email);
+        contentValues.put(Constants.C_ADDED_TIME, addedTime);
+        contentValues.put(Constants.C_UPDATED_TIME, updatedTime);
 
         //update data in row, It will return id of record
         db.update(Constants.TABLE_NAME,contentValues,Constants.C_ID+" =? ",new String[]{id} );
@@ -99,7 +95,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db =  getWritableDatabase();
 
         //delete query
-        db.delete(Constants.TABLE_NAME,"WHERE"+" =? ",new String[]{id});
+        db.delete(Constants.TABLE_NAME,"ID" + " = ?", new String[]{id});
 
         db.close();
     }
@@ -110,7 +106,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         //query for delete
-        db.execSQL("DELETE FROM "+Constants.TABLE_NAME);
+        db.execSQL("DELETE FROM " + Constants.TABLE_NAME);
         db.close();
     }
 
@@ -120,7 +116,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //create arrayList
         ArrayList<ModelContact> arrayList = new ArrayList<>();
         //sql command query
-        String selectQuery = "SELECT * FROM "+Constants.TABLE_NAME;
+        String selectQuery = "SELECT * FROM " + Constants.TABLE_NAME;
 
         //get readable db
         SQLiteDatabase db = getReadableDatabase();
@@ -131,14 +127,15 @@ public class DbHelper extends SQLiteOpenHelper {
             do {
                 ModelContact modelContact = new ModelContact(
                         // only id is integer type
-                        ""+cursor.getInt(cursor.getColumnIndexOrThrow(Constants.C_ID)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PHONE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NOTE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_ADDED_TIME)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_UPDATED_TIME))
+                        "" + cursor.getInt(cursor.getColumnIndexOrThrow(Constants.C_ID)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_FNAME)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_LNAME)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_CNAME)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PNUM)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_ADDED_TIME)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_UPDATED_TIME))
                 );
                 arrayList.add(modelContact);
             }while (cursor.moveToNext());
@@ -157,7 +154,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         //query for search
-        String queryToSearch = "SELECT * FROM "+Constants.TABLE_NAME+" WHERE "+Constants.C_NAME + " LIKE '%" +query+"%'";
+        String queryToSearch = "SELECT * FROM "+Constants.TABLE_NAME+" WHERE "+Constants.C_FNAME + " LIKE '%" +query+"%'";
 
         Cursor cursor = db.rawQuery(queryToSearch,null);
 
@@ -166,14 +163,15 @@ public class DbHelper extends SQLiteOpenHelper {
             do {
                 ModelContact modelContact = new ModelContact(
                         // only id is integer type
-                        ""+cursor.getInt(cursor.getColumnIndexOrThrow(Constants.C_ID)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PHONE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NOTE)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_ADDED_TIME)),
-                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_UPDATED_TIME))
+                        "" + cursor.getInt(cursor.getColumnIndexOrThrow(Constants.C_ID)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_FNAME)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_LNAME)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_CNAME)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_PNUM)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_EMAIL)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_ADDED_TIME)),
+                        "" + cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_UPDATED_TIME))
                 );
                 contactList.add(modelContact);
             }while (cursor.moveToNext());
